@@ -5,7 +5,15 @@ use std::str::Chars;
 
 fn detect_capital_use(word: &str) -> bool {
     // Constraints: 1 <= word.length <= 100
-    let mut it = word.chars();
+    let mut it: Chars<'_> = word.chars();
+
+    // Match solution
+    match (it.next(), it.next()) {
+        (_, Some('a'..='z')) => it.all(|c: char| c.is_lowercase()),
+        (Some('A'..='Z'), Some('A'..='Z')) => it.all(|c: char| c.is_uppercase()),
+        (_, None) => true,
+        (_, _) => false, // Should never happen
+    }
 
     // // If else solution
     // let first_letter = it.next().unwrap();
@@ -23,14 +31,6 @@ fn detect_capital_use(word: &str) -> bool {
     //         true
     //     }
     // }
-
-    // Match solution
-    match (it.next(), it.next()) {
-        (_, Some('a'..='z')) => it.all(|c: char| c.is_lowercase()),
-        (Some('A'..='Z'), Some('A'..='Z')) => it.all(|c: char| c.is_uppercase()),
-        (_, None) => true,
-        (_, _) => false, // Should never happen
-    }
 }
 
 fn parallel_all_detect_capital_use(word: &str) -> bool {
@@ -123,10 +123,9 @@ fn parallel_try_fold_detect_capital_use(word: &str) -> bool {
             |b, e| {
                 let n = b && cl(e);
 
-                if n {
-                    Some(n)
-                } else {
-                    None
+                match n {
+                    true => Some(n),
+                    false => None,
                 }
             },
         )
@@ -136,7 +135,7 @@ fn parallel_try_fold_detect_capital_use(word: &str) -> bool {
 
 fn main() {
     // // Used only for better diagrams and analysis
-    // rayon::ThreadPoolBuilder::new().num_threads(4).build_global().unwrap();
+    rayon::ThreadPoolBuilder::new().num_threads(4).build_global().unwrap();
 
     let test_sizes = [
         1_000,
@@ -144,16 +143,16 @@ fn main() {
         100_000,
         1_000_000,
         10_000_000,
-        100_000_000,
-        1_000_000_000,
+        // 100_000_000,
+        // 1_000_000_000, // Should take a few seconds with run --release
     ];
 
     for size in test_sizes {
         println!("Input size: {:?}", size);
 
-        let test_strings = &create_set(size);
+        let test_strings: &Vec<Test> = &create_set(size);
 
-        let mut start = std::time::Instant::now();
+        let mut start: std::time::Instant = std::time::Instant::now();
         for test in test_strings {
             test.assert(detect_capital_use);
         }
@@ -233,8 +232,8 @@ fn create_set(size: usize) -> Vec<Test> {
     let mut almost_all_lowercase: String = "a".repeat(size - 1);
     almost_all_lowercase.push('Z'); // Last letter uppercase
 
-    let mut rng = rand::thread_rng();
-    let random_index = rng.gen_range(0..size);
+    let mut rng: rand::prelude::ThreadRng = rand::thread_rng();
+    let random_index: usize = rng.gen_range(0..size);
     let mut random_incorrect: String = "o".repeat(random_index);
     random_incorrect.push('O');
     random_incorrect.push_str(&"o".repeat(size - random_index - 1));
@@ -284,11 +283,13 @@ fn create_set(size: usize) -> Vec<Test> {
             string: big_lowercase,
             expected: true,
         },
-        Test { // index 11
+        Test {
+            // index 11
             string: big_first_cap,
             expected: true,
         },
-        Test { // index 12
+        Test {
+            // index 12
             string: big_incorrect,
             expected: false,
         },
@@ -296,16 +297,23 @@ fn create_set(size: usize) -> Vec<Test> {
             string: almost_all_lowercase,
             expected: false,
         },
-        Test { // index 14
+        Test {
+            // index 14
             string: random_incorrect,
             expected: false,
         },
     ]
 }
 
-fn _create_diagrams(function: fn(word: &str) -> bool, name: &str, big_first_cap: &str, big_incorrect: &str , random_incorrect: &str) {
+fn _create_diagrams(
+    function: fn(word: &str) -> bool,
+    name: &str,
+    big_first_cap: &str,
+    big_incorrect: &str,
+    random_incorrect: &str,
+) {
     // Create visualisation of operations
-    let mut path = name.to_owned();
+    let mut path: String = name.to_owned();
     path.push_str("_full.svg");
     diam::svg(path, || function(&big_first_cap)).unwrap();
 

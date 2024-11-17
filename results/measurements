@@ -1,3 +1,5 @@
+All of this measurements were taken with the release build and in a computer with 12th Gen Intel® Core™ i5-12500H × 16 processor.
+
 Input size: 1000
 basic took 2.36µs
 parallel all took 1.033544ms
