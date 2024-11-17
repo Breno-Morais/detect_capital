@@ -1,0 +1,54 @@
+Input size: 1000
+basic took 2.36µs
+parallel all took 1.033544ms
+parallel rayon_all took 112.291µs
+parallel map took 268.445µs
+parallel try fold took 195.367µs
+
+
+Input size: 10000
+basic took 42.979µs
+parallel all took 207.615µs
+parallel rayon_all took 188.051µs
+parallel map took 203.542µs
+parallel try fold took 265.746µs
+
+
+Input size: 100000
+basic took 195.34µs
+parallel all took 333.389µs
+parallel rayon_all took 301.4µs
+parallel map took 319.656µs
+parallel try fold took 267.235µs
+
+
+Input size: 1000000
+basic took 1.811154ms
+parallel all took 1.435961ms
+parallel rayon_all took 1.203934ms
+parallel map took 1.600593ms
+parallel try fold took 1.072185ms
+
+
+Input size: 10000000
+basic took 16.186789ms
+parallel all took 7.804176ms
+parallel rayon_all took 6.431034ms
+parallel map took 8.050793ms
+parallel try fold took 6.90453ms
+
+
+Input size: 100000000
+basic took 162.866131ms
+parallel all took 82.446943ms
+parallel rayon_all took 81.715517ms
+parallel map took 84.833867ms
+parallel try fold took 81.535044ms
+
+
+Input size: 1000000000
+basic took 1.600059963s
+parallel all took 876.600722ms
+parallel rayon_all took 1.02794627s
+parallel map took 919.037646ms
+parallel try fold took 917.055796ms

@@ -1,0 +1,9 @@
+[package]
+name = "detect_capital"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rayon="1.4.1" # uncomment me and comment line above to disable logs for better performances
+rand="*"
+diam={git="https://github.com/wagnerf42/diam"}
