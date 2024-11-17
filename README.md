@@ -55,7 +55,7 @@ The performance metrics revealed:
   -`map` and `reduce` 
 ![Map Diagram](./results/diagrams/map_half.svg)
 
-- One small detail about the diagrams, I don't really understand why some threads stay idle right before the division of labor
+- One small detail about the diagrams, I don't really understand why some threads stay idle right after the division of labor
 
 ## Conclusion
 
